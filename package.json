@@ -1,13 +1,12 @@
 {
   "name": "claim-gmail",
   "version": "0.0.0",
-  "main": "build/index.js",
+  "main": "functions/index.js",
   "license": "Apache-2.0",
   "keywords": [],
   "scripts": {
     "tsc": "npx tsc",
-    "dev": "ts-node src/index.ts",
-    "dev:watch": "ts-node-dev --respawn src/index.ts"
+    "deploy": "gcloud functions deploy claim-gmail --gen2 --entry-point=api --region=us-central1 --runtime=nodejs20 --trigger-http --allow-unauthenticated --source=. --env-vars-file=.env.yml"
   },
   "engines": {
     "node": ">=12"
