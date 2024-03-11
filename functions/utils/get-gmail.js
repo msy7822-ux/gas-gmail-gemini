@@ -15,12 +15,13 @@ const getGmail = async ({ token }) => {
         const messages = res.data.messages;
         if (!messages)
             return null;
-        const message = await gmail.users.messages
-            .get({
+        const message = await gmail.users.messages.get({
             userId: 'me',
             id: messages[0].id,
-        })
-            .then(response => response.data);
+        });
+        console.log('Message body:', message.data.payload?.body?.data);
+        const buf = Buffer.from(message.data.payload?.body?.data ?? '', 'base64');
+        const str = buf.toString();
         return message;
     }
     catch (error) {

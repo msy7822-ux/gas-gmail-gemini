@@ -9,12 +9,14 @@ functions.http('api', async (req, res) => {
     const arg = req.query.arg;
     const code = req.query.code;
     const token = req.query.token;
+    const isAuth = Boolean(req.query.auth);
     if (!!code) {
         const token = await (0, get_google_refresh_token_1.getGoogleRefreshToken)(code);
         if (!token.access_token)
             throw new Error('Invalid access token');
         (0, set_google_credential_1.setGoogleCredential)(token.access_token);
-        res.status(200).send({ token: token.access_token });
+        const redirectUrl = process.env.APP_URL + '?token=' + token.access_token;
+        res.redirect(redirectUrl ?? '');
         return;
     }
     if (arg === 'auth') {
@@ -26,4 +28,5 @@ functions.http('api', async (req, res) => {
         throw new Error('Invalid token');
     const message = await (0, get_gmail_1.getGmail)({ token });
     console.log('Message:', message);
+    res.status(200).send({ message: 'message?.snippet' });
 });

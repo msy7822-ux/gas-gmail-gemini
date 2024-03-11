@@ -16,12 +16,18 @@ export const getGmail = async ({ token }: { token: string }) => {
     if (!messages) return null;
 
     // 最初のメールの詳細を取得
-    const message = await gmail.users.messages
-      .get({
-        userId: 'me',
-        id: messages[0].id!,
-      })
-      .then(response => response.data);
+    const message = await gmail.users.messages.get({
+      userId: 'me',
+      id: messages[0].id!,
+    });
+
+    console.log('Message body:', message.data);
+
+    const buf = Buffer.from(message.data.payload?.body?.data ?? '', 'base64');
+    const str = buf.toString();
+
+    // console.log('Message:', str);
+
     return message;
   } catch (error) {
     console.error('Error:', error);
